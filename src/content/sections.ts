@@ -5,6 +5,7 @@ export const SECTION = {
   product: 'product',
   howItWorks: 'how-it-works',
   customers: 'customers',
+  savings: 'savings',
   whatsNew: 'whats-new',
   contact: 'contact',
 } as const
