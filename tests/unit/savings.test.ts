@@ -173,4 +173,11 @@ describe('calculateSavings', () => {
     expect(() => calculateSavings({ assets: NaN, hourlyCost: 52 })).toThrow(RangeError)
     expect(() => calculateSavings({ assets: 500, hourlyCost: Infinity })).toThrow(RangeError)
   })
+
+  it('rounds exact half-way yearly values up to the next $1,000', () => {
+    expect(calculateSavings({ assets: 625, hourlyCost: 32.8 }).dollarsPerYear).toBe(62_000)
+    expect(calculateSavings({ assets: 625, hourlyCost: 69.6 }).dollarsPerYear).toBe(131_000)
+    expect(calculateSavings({ assets: 625, hourlyCost: 135.2 }).dollarsPerYear).toBe(254_000)
+    expect(calculateSavings({ assets: 1250, hourlyCost: 34.8 }).dollarsPerYear).toBe(131_000)
+  })
 })

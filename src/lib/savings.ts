@@ -40,9 +40,12 @@ export function calculateSavings(input: SavingsInput): SavingsResult {
   if (!inRange('assets', assets) || !inRange('hourlyCost', hourlyCost)) {
     throw new RangeError('Savings inputs are outside the allowed range.')
   }
+  // Integer math keeps exact half-way values (for example $61,500) from rounding down.
+  const costCents = Math.round(hourlyCost * 100)
+  const yearlyMinutes = assets * MINUTES_SAVED_PER_ASSET_PER_MONTH * 12
   const hoursExact = (assets * MINUTES_SAVED_PER_ASSET_PER_MONTH) / 60
   return {
     hoursPerMonth: Math.round(hoursExact),
-    dollarsPerYear: Math.round((hoursExact * 12 * hourlyCost) / 1000) * 1000,
+    dollarsPerYear: Math.round((yearlyMinutes * costCents) / 6_000_000) * 1000,
   }
 }
