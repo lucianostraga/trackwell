@@ -69,6 +69,7 @@ test('a hospital visitor books a demo with a validated form', async ({ page }) =
   await expect(t('demo-beds-error')).toHaveCount(0)
   await presentClick(t('demo-submit'))
   await expect(t('demo-confirmation')).toHaveText("Thanks, Ana! We'll reach out within one business day.")
+  await expect(t('demo-confirmation')).toBeFocused()
   await expect(t('demo-form')).toHaveCount(0)
   await pause(page, 900)
   await hideCaption(page)

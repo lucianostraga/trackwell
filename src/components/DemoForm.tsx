@@ -1,5 +1,5 @@
 import { CircleCheck } from 'lucide-react'
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import {
   DEMO_ROLES,
   EMPTY_DEMO_FORM,
@@ -60,6 +60,12 @@ export function DemoForm() {
   const [values, setValues] = useState<DemoFormValues>(EMPTY_DEMO_FORM)
   const [errors, setErrors] = useState<DemoFormErrors>({})
   const [done, setDone] = useState<string | null>(null)
+  const confirmationRef = useRef<HTMLDivElement>(null)
+
+  // The submit button disappears with the form: move focus to the confirmation so it is read out.
+  useEffect(() => {
+    if (done) confirmationRef.current?.focus()
+  }, [done])
 
   const update = (field: DemoField, value: string) => {
     const next = { ...values, [field]: value }
@@ -83,7 +89,7 @@ export function DemoForm() {
 
   if (done) {
     return (
-      <div role="status" data-testid="demo-confirmation" className="flex min-h-[28rem] flex-col items-center justify-center text-center">
+      <div ref={confirmationRef} tabIndex={-1} role="status" data-testid="demo-confirmation" className="outline-none flex min-h-[28rem] flex-col items-center justify-center text-center">
         <span className="grid size-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 ring-inset">
           <CircleCheck aria-hidden="true" className="size-7" />
         </span>
