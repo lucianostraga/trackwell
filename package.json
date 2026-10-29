@@ -2,7 +2,7 @@
   "name": "trackwell",
   "private": true,
   "version": "1.0.0",
-  "description": "Trackwell: real-time equipment tracking for hospitals (a fictional product for a demo).",
+  "description": "Trackwell marketing website: real-time equipment tracking for hospitals (a fictional company for a demo).",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"

@@ -1,19 +1,19 @@
-# Trackwell
+# Trackwell website
 
-Trackwell (a fictional SaaS) shows where every piece of hospital equipment is, in real time: a live floor plan, the
-equipment list, alerts and asset details. This instance is "St. Aurelia Medical Center, Level 2 · Critical Care".
-Vite + React + TypeScript (strict) + Tailwind CSS v4, deterministic mock data, no backend. Production:
-https://lucianostraga.github.io/trackwell/ (GitHub Pages, deployed by `.github/workflows/deploy.yml` on every push to
-main). Every pull request gets a preview at `https://lucianostraga.github.io/trackwell/preview/pr-<n>/` with its
-end-to-end evidence.
+The public website of Trackwell (a fictional company that tracks hospital equipment in real time): one page with the
+hero and product screenshot, how it works, features, customers, What's new and contact. Vite + React + TypeScript
+(strict) + Tailwind CSS v4, no backend. Production: https://lucianostraga.github.io/trackwell/ (GitHub Pages, deployed
+by `.github/workflows/deploy.yml` on every push to main). Every pull request gets a preview at
+`https://lucianostraga.github.io/trackwell/preview/pr-<n>/` with its end-to-end evidence.
 
 ## Commands
 - `npm ci` · `npm run typecheck` · `npm test` (Vitest) · `npm run build` · `npm run evidence` (Playwright end-to-end:
   screenshots and videos in `evidence/`) · `npm run dev`.
 
 ## Conventions
-- Business rules are pure, typed functions in `src/lib/<module>.ts`; components only render. Anything that depends
-  on time takes `now` as a parameter.
+- Texts and lists live in typed files in `src/content/`; business rules (prices, validation, calculations) are pure,
+  typed functions in `src/lib/<module>.ts`; components only render. New sections go in `src/App.tsx`, and sections
+  that need a navbar link are registered in `src/content/sections.ts`.
 - Unit tests: `tests/unit/<module>.test.ts`, one file per lib module (see the `ts-unit-tests` skill).
 - End-to-end: `e2e/<ticket>.spec.ts` (e.g. `e2e/tw-5.spec.ts`), Chromium headless; each spec asserts behaviour and
   leaves a screenshot per acceptance criterion and a video in `evidence/`.

@@ -1,17 +1,21 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens. Brand: Trackwell (fictional).
+ * Design tokens. Brand: Trackwell (fictional), shared with the Trackwell app.
  * ink navy #0e1a2b · primary teal #0e8478 · warm accent apricot #f29a5b
- * Every color is a CSS variable, so a dark theme can redefine them in one place.
+ * Every color is a CSS variable (including page surfaces), so a dark theme can
+ * redefine them in one place.
  */
 @theme static {
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, ui-serif, serif;
   --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
-  /* Map + side column from 1280px; stacked below. Alerts join the side column from 1800px. */
-  --breakpoint-wide: 80rem;
-  --breakpoint-3xl: 112.5rem;
+  /* Page surfaces */
+  --color-page: #ffffff;
+  --color-page-subtle: #f7f9fb;
+  --color-surface: #ffffff;
+  --color-night: #0b1624;
 
   /* Neutrals tinted toward the navy ink */
   --color-ink-25: #fbfcfd;
@@ -38,7 +42,7 @@
   --color-brand-700: #0f6a62;
   --color-brand-800: #11554f;
 
-  /* Warm accent (apricot), also "attention" */
+  /* Warm accent (apricot) */
   --color-sun-50: #fff6ee;
   --color-sun-100: #ffe9d6;
   --color-sun-300: #fbc193;
@@ -56,92 +60,18 @@
   --color-bad-500: #e5484d;
   --color-bad-700: #b4232a;
 
-  /* Equipment types (map dots, legend, list icons) */
-  --color-type-infusion-pump: #3b6ff5;
-  --color-type-wheelchair: #8b5cf6;
-  --color-type-patient-monitor: #16a34a;
-  --color-type-ventilator: #0aa2c0;
-  --color-type-hospital-bed: #e59a0b;
-  --color-type-defibrillator: #e5484d;
-  --color-type-portable-ultrasound: #d6409f;
-
-  /* Floor plan */
-  --color-map-bg: #f3f6f8;
-  --color-map-grid: #dfe5eb;
-  --color-map-floor: #ffffff;
-  --color-map-wall: #9aa6b6;
-  --color-map-wall-outer: #445063;
-  --color-map-line: #cfd6df;
-  --color-map-corridor: #f4f2ee;
-  --color-map-label: #1e2a3b;
-  --color-map-sublabel: #6b7789;
-  --color-zone-emergency: #fdf0ef;
-  --color-zone-icu: #eaf7f4;
-  --color-zone-radiology: #f2f0fb;
-  --color-zone-operating-rooms: #ecf4fb;
-  --color-zone-ward-a: #fbf6ec;
-  --color-zone-ward-b: #f5f8ec;
-  --color-zone-pharmacy: #f0f7f1;
-  --color-zone-central-supply: #f1f3f7;
-  --color-zone-sterile-processing: #ebf6f8;
-  --color-zone-nurses-station: #f4f2ee;
-
   --shadow-card: 0 1px 2px rgb(14 26 43 / 0.04), 0 1px 1px rgb(14 26 43 / 0.02);
   --shadow-raised: 0 1px 2px rgb(14 26 43 / 0.05), 0 8px 20px -6px rgb(14 26 43 / 0.12);
-  --shadow-drawer: -24px 0 64px -12px rgb(14 26 43 / 0.22), -1px 0 0 rgb(14 26 43 / 0.06);
   --shadow-pop: 0 2px 4px rgb(14 26 43 / 0.06), 0 16px 40px -8px rgb(14 26 43 / 0.25);
+  --shadow-product: 0 0 0 1px rgb(14 26 43 / 0.06), 0 2px 4px rgb(14 26 43 / 0.04), 0 24px 48px -12px rgb(14 26 43 / 0.18),
+    0 60px 120px -24px rgb(14 132 120 / 0.28);
+  --shadow-button: 0 1px 2px rgb(14 26 43 / 0.12), inset 0 1px 0 rgb(255 255 255 / 0.16);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --animate-drawer-in: drawer-in 320ms var(--ease-out-expo);
-  --animate-drawer-out: drawer-out 200ms ease-in forwards;
-  --animate-fade-in: fade-in 200ms ease-out;
-  --animate-fade-out: fade-out 200ms ease-in forwards;
-  --animate-pop-in: pop-in 220ms var(--ease-out-expo);
   --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
 
-  @keyframes drawer-in {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-  @keyframes drawer-out {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(100%);
-    }
-  }
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes fade-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-      transform: translateY(4px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
   @keyframes pulse-dot {
     0% {
       box-shadow: 0 0 0 0 currentColor;
@@ -154,6 +84,15 @@
       box-shadow: 0 0 0 0 transparent;
     }
   }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
 }
 
 @layer base {
@@ -162,10 +101,13 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv11', 'ss01', 'ss03';
+    scroll-behavior: smooth;
+    /* Anchored sections land below the sticky navbar. */
+    scroll-padding-top: 68px;
   }
 
   body {
-    @apply bg-ink-50 font-sans text-ink-700;
+    @apply bg-page font-sans text-ink-600;
   }
 
   ::selection {
@@ -182,75 +124,22 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- Floor plan: live pulse, corridor drift and the selection ring ---- */
-
-.map-viewport {
-  transition: transform 750ms var(--ease-out-expo);
+/* Faint blueprint grid behind the hero, fading out toward the edges. */
+@utility hero-grid {
+  background-image:
+    linear-gradient(to right, var(--color-ink-150) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-ink-150) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
 }
 
-.asset-dot {
-  cursor: pointer;
-  transition: opacity 250ms ease;
-}
-
-.asset-dot .pulse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: asset-pulse 3.2s ease-out infinite;
-}
-
-@keyframes asset-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.45;
-  }
-  70%,
-  100% {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-
-.asset-dot .core {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 200ms var(--ease-out-expo);
-}
-
-.asset-dot:hover .core,
-.asset-dot[data-hovered='true'] .core {
-  transform: scale(1.35);
-}
-
-/* Purely visual: a few moving assets glide along the corridor and back. */
-.asset-drift {
-  animation: asset-drift var(--drift-duration, 16s) ease-in-out infinite alternate;
-}
-
-@keyframes asset-drift {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(var(--drift-x, 4px));
-  }
-}
-
-.selection-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: selection-ring 1.8s ease-out infinite;
-}
-
-@keyframes selection-ring {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
+/* Teal headline accent. */
+@utility text-gradient-brand {
+  background-image: linear-gradient(100deg, var(--color-brand-700) 0%, var(--color-brand-500) 55%, var(--color-brand-400) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .live-dot::after {
@@ -271,6 +160,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
