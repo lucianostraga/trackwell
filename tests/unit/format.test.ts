@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatBuildTime, formatDate, formatDateTime } from '../../src/lib/format'
+import { formatBuildTime, formatDate, formatDateTime, formatInteger, formatUsd } from '../../src/lib/format'
 
 describe('formatDate', () => {
   it('treats date-only strings as calendar days', () => {
@@ -22,5 +22,21 @@ describe('formatBuildTime', () => {
   it('formats ISO timestamps and keeps anything else as is', () => {
     expect(formatBuildTime('2026-10-29T14:05:00Z', 'UTC')).toBe('Oct 29, 2:05 PM')
     expect(formatBuildTime('local')).toBe('local')
+  })
+})
+
+describe('formatUsd', () => {
+  it('formats whole dollars with grouping and no cents', () => {
+    expect(formatUsd(78000)).toBe('$78,000')
+    expect(formatUsd(12000000)).toBe('$12,000,000')
+    expect(formatUsd(0)).toBe('$0')
+  })
+})
+
+describe('formatInteger', () => {
+  it('groups thousands', () => {
+    expect(formatInteger(1500)).toBe('1,500')
+    expect(formatInteger(125)).toBe('125')
+    expect(formatInteger(5000)).toBe('5,000')
   })
 })

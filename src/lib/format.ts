@@ -31,3 +31,17 @@ export function formatDate(value: string, options: { withYear?: boolean } = {}):
 export function formatBuildTime(value: string, timeZone?: string): string {
   return Number.isNaN(Date.parse(value)) ? value : formatDateTime(value, timeZone)
 }
+
+/** "$78,000": whole US dollars, en-US grouping, no cents. */
+export function formatUsd(amount: number): string {
+  return new Intl.NumberFormat(LOCALE, {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+/** "1,500": whole number with en-US grouping. */
+export function formatInteger(value: number): string {
+  return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 }).format(value)
+}
