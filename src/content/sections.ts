@@ -6,6 +6,7 @@ export const SECTION = {
   howItWorks: 'how-it-works',
   customers: 'customers',
   savings: 'savings',
+  pricing: 'pricing',
   whatsNew: 'whats-new',
   contact: 'contact',
 } as const
@@ -15,6 +16,7 @@ export const NAV_LINKS: readonly SectionLink[] = [
   { id: SECTION.product, label: 'Product' },
   { id: SECTION.howItWorks, label: 'How it works' },
   { id: SECTION.customers, label: 'Customers' },
+  { id: SECTION.pricing, label: 'Pricing' },
 ]
 
 export const CONTACT_EMAIL = 'sales@trackwell.example'
