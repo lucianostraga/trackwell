@@ -140,7 +140,7 @@ export function SavingsCalculator() {
             </div>
           </div>
         </div>
-        <p className="mt-4 text-center text-[13px] text-ink-400" data-testid="savings-footnote">
+        <p className="mt-4 text-center text-[13px] text-ink-500" data-testid="savings-footnote">
           {COPY.footnote}
         </p>
       </Container>
