@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Evidence is produced by `npm run evidence` / CI; only the folder is tracked
+evidence/*
+!evidence/.gitkeep
+
+# Local env and editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Agentic delivery loop: paperwork drafts written by release-scribe
+.loop-out/

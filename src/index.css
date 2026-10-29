@@ -1,0 +1,281 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Brand: Trackwell (fictional).
+ * ink navy #0e1a2b · primary teal #0e8478 · warm accent apricot #f29a5b
+ * Every color is a CSS variable, so a dark theme can redefine them in one place.
+ */
+@theme static {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* Map + side column from 1280px; stacked below. Alerts join the side column from 1800px. */
+  --breakpoint-wide: 80rem;
+  --breakpoint-3xl: 112.5rem;
+
+  /* Neutrals tinted toward the navy ink */
+  --color-ink-25: #fbfcfd;
+  --color-ink-50: #f5f7f9;
+  --color-ink-100: #eef1f5;
+  --color-ink-150: #e4e8ee;
+  --color-ink-200: #d7dde5;
+  --color-ink-300: #b9c2ce;
+  --color-ink-400: #8a96a7;
+  --color-ink-500: #627083;
+  --color-ink-600: #4a5668;
+  --color-ink-700: #344052;
+  --color-ink-800: #1e2a3b;
+  --color-ink-900: #0e1a2b;
+
+  /* Primary teal */
+  --color-brand-50: #edfaf7;
+  --color-brand-100: #d2f3ec;
+  --color-brand-200: #a6e6d9;
+  --color-brand-300: #6dd0bf;
+  --color-brand-400: #34b3a1;
+  --color-brand-500: #12988a;
+  --color-brand-600: #0e8478;
+  --color-brand-700: #0f6a62;
+  --color-brand-800: #11554f;
+
+  /* Warm accent (apricot), also "attention" */
+  --color-sun-50: #fff6ee;
+  --color-sun-100: #ffe9d6;
+  --color-sun-300: #fbc193;
+  --color-sun-400: #f29a5b;
+  --color-sun-600: #c4652a;
+  --color-sun-700: #9a4b1c;
+
+  /* Status */
+  --color-good-50: #ecfaf3;
+  --color-good-100: #d2f2e2;
+  --color-good-500: #16a35f;
+  --color-good-700: #0d7243;
+  --color-bad-50: #fff1f1;
+  --color-bad-100: #ffdede;
+  --color-bad-500: #e5484d;
+  --color-bad-700: #b4232a;
+
+  /* Equipment types (map dots, legend, list icons) */
+  --color-type-infusion-pump: #3b6ff5;
+  --color-type-wheelchair: #8b5cf6;
+  --color-type-patient-monitor: #16a34a;
+  --color-type-ventilator: #0aa2c0;
+  --color-type-hospital-bed: #e59a0b;
+  --color-type-defibrillator: #e5484d;
+  --color-type-portable-ultrasound: #d6409f;
+
+  /* Floor plan */
+  --color-map-bg: #f3f6f8;
+  --color-map-grid: #dfe5eb;
+  --color-map-floor: #ffffff;
+  --color-map-wall: #9aa6b6;
+  --color-map-wall-outer: #445063;
+  --color-map-line: #cfd6df;
+  --color-map-corridor: #f4f2ee;
+  --color-map-label: #1e2a3b;
+  --color-map-sublabel: #6b7789;
+  --color-zone-emergency: #fdf0ef;
+  --color-zone-icu: #eaf7f4;
+  --color-zone-radiology: #f2f0fb;
+  --color-zone-operating-rooms: #ecf4fb;
+  --color-zone-ward-a: #fbf6ec;
+  --color-zone-ward-b: #f5f8ec;
+  --color-zone-pharmacy: #f0f7f1;
+  --color-zone-central-supply: #f1f3f7;
+  --color-zone-sterile-processing: #ebf6f8;
+  --color-zone-nurses-station: #f4f2ee;
+
+  --shadow-card: 0 1px 2px rgb(14 26 43 / 0.04), 0 1px 1px rgb(14 26 43 / 0.02);
+  --shadow-raised: 0 1px 2px rgb(14 26 43 / 0.05), 0 8px 20px -6px rgb(14 26 43 / 0.12);
+  --shadow-drawer: -24px 0 64px -12px rgb(14 26 43 / 0.22), -1px 0 0 rgb(14 26 43 / 0.06);
+  --shadow-pop: 0 2px 4px rgb(14 26 43 / 0.06), 0 16px 40px -8px rgb(14 26 43 / 0.25);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-drawer-in: drawer-in 320ms var(--ease-out-expo);
+  --animate-drawer-out: drawer-out 200ms ease-in forwards;
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-fade-out: fade-out 200ms ease-in forwards;
+  --animate-pop-in: pop-in 220ms var(--ease-out-expo);
+  --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
+
+  @keyframes drawer-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes drawer-out {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  @keyframes pulse-dot {
+    0% {
+      box-shadow: 0 0 0 0 currentColor;
+      opacity: 1;
+    }
+    70% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+
+  body {
+    @apply bg-ink-50 font-sans text-ink-700;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-ink-900;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Floor plan: live pulse, corridor drift and the selection ring ---- */
+
+.map-viewport {
+  transition: transform 750ms var(--ease-out-expo);
+}
+
+.asset-dot {
+  cursor: pointer;
+  transition: opacity 250ms ease;
+}
+
+.asset-dot .pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: asset-pulse 3.2s ease-out infinite;
+}
+
+@keyframes asset-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.asset-dot .core {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 200ms var(--ease-out-expo);
+}
+
+.asset-dot:hover .core,
+.asset-dot[data-hovered='true'] .core {
+  transform: scale(1.35);
+}
+
+/* Purely visual: a few moving assets glide along the corridor and back. */
+.asset-drift {
+  animation: asset-drift var(--drift-duration, 16s) ease-in-out infinite alternate;
+}
+
+@keyframes asset-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--drift-x, 4px));
+  }
+}
+
+.selection-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: selection-ring 1.8s ease-out infinite;
+}
+
+@keyframes selection-ring {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: live-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes live-ping {
+  75%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

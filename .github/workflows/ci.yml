@@ -1,0 +1,251 @@
+name: CI
+
+# Pull requests to main: build and unit tests, end-to-end tests with recorded
+# evidence, then a preview of the app published to GitHub Pages under
+# /preview/pr-<number>/ and a single sticky comment on the PR.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run that is still going.
+concurrency:
+  group: ci-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+  HEAD_REF: ${{ github.head_ref }}
+  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+  PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+  BASE_PREFIX: /${{ github.event.repository.name }}
+
+jobs:
+  build:
+    name: Gate 1 · Build & unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build preview
+        run: |
+          export BASE_PATH="${BASE_PREFIX}/preview/pr-${PR_NUMBER}/"
+          export VITE_ENV=preview
+          export VITE_BUILD_SHA="${HEAD_SHA::7}"
+          export VITE_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export VITE_PREVIEW_LABEL="PR #${PR_NUMBER} · ${HEAD_REF}"
+          npm run build
+          cat dist/version.json
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+          if-no-files-found: error
+
+  e2e:
+    name: Gate 3 · End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Read Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Chromium
+        id: browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-chromium
+
+      - name: Install Chromium with system dependencies
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Chromium system dependencies
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      # The e2e build is served from "/" by vite preview; the VITE_* values make the
+      # screenshots and the video show this PR's preview badge and build info.
+      - name: Run end-to-end tests
+        run: |
+          export VITE_ENV=preview
+          export VITE_BUILD_SHA="${HEAD_SHA::7}"
+          export VITE_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export VITE_PREVIEW_LABEL="PR #${PR_NUMBER} · ${HEAD_REF}"
+          npm run test:e2e
+
+      - name: List evidence
+        if: ${{ !cancelled() }}
+        run: ls -la evidence/
+
+      - name: Upload evidence (screenshots and videos)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence
+          path: |
+            evidence/*.png
+            evidence/*.webm
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  deploy-preview:
+    name: Deploy preview (sandbox)
+    needs: [build, e2e]
+    # Forks get a read-only token: they cannot push to gh-pages or comment.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    # Every job that writes gh-pages shares this group, so pushes never race.
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    environment:
+      name: preview
+      url: ${{ env.PAGES_URL }}/preview/pr-${{ github.event.pull_request.number }}/
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: site
+
+      - name: Download evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: evidence
+          path: site/evidence
+
+      - name: Publish to gh-pages under preview/pr-${{ github.event.pull_request.number }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+          destination_dir: preview/pr-${{ github.event.pull_request.number }}
+          keep_files: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: 'Preview for PR #${{ github.event.pull_request.number }}'
+
+      # Screenshots are embedded from this gh-pages commit: they render right away
+      # (Pages needs about a minute to publish) and survive the preview cleanup.
+      - name: Resolve the published commit
+        id: published
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "sha=$(gh api "repos/${GITHUB_REPOSITORY}/commits/gh-pages" --jq .sha)" >> "$GITHUB_OUTPUT"
+
+      - name: Post or update the preview comment
+        uses: actions/github-script@v7
+        env:
+          PREVIEW_URL: ${{ env.PAGES_URL }}/preview/pr-${{ github.event.pull_request.number }}/
+          PAGES_SHA: ${{ steps.published.outputs.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          script: |
+            const fs = require('node:fs')
+            const marker = '<!-- trackwell-preview -->'
+            const { owner, repo } = context.repo
+            const issue_number = context.payload.pull_request.number
+            const { PREVIEW_URL, PAGES_SHA, RUN_URL, HEAD_SHA } = process.env
+            const shortSha = HEAD_SHA.slice(0, 7)
+
+            const files = fs.existsSync('site/evidence') ? fs.readdirSync('site/evidence').sort() : []
+            const shots = files.filter((f) => f.endsWith('.png'))
+            const videos = files.filter((f) => f.endsWith('.webm'))
+            const pinned = (f) => `https://github.com/${owner}/${repo}/raw/${PAGES_SHA}/preview/pr-${issue_number}/evidence/${f}`
+            const live = (f) => `${PREVIEW_URL}evidence/${f}`
+            const title = (f) => f.replace(/\.(png|webm)$/, '').replace(/[-_]+/g, ' ')
+
+            const body = [
+              marker,
+              `### Preview · PR #${issue_number}`,
+              '',
+              `**[Open the preview](${PREVIEW_URL})** · \`${PREVIEW_URL}\``,
+              '',
+              '| Gate | Result |',
+              '| --- | --- |',
+              '| Gate 1 · Build & unit tests | passed |',
+              '| Gate 3 · End-to-end (Playwright) | passed |',
+              '',
+              `Commit \`${shortSha}\` · [workflow run and artifacts](${RUN_URL})`,
+              '',
+              '#### Screenshots',
+              ...(shots.length
+                ? shots.flatMap((f) => [
+                    `**${title(f)}**`,
+                    '',
+                    `<a href="${live(f)}"><img src="${pinned(f)}" alt="${title(f)}" width="880"></a>`,
+                    '',
+                  ])
+                : ['_No screenshots were produced._', '']),
+              '#### Videos',
+              ...(videos.length
+                ? videos.map((f) => `- [${title(f)} (${f})](${live(f)})`)
+                : ['_No videos were produced._']),
+              '',
+              `<sub>Updated ${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC. GitHub Pages can take a minute to publish a new commit.</sub>`,
+            ].join('\n')
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            })
+            const existing = comments.find((c) => c.user?.type === 'Bot' && c.body?.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body })
+              core.info(`Updated comment ${existing.html_url}`)
+            } else {
+              const { data } = await github.rest.issues.createComment({ owner, repo, issue_number, body })
+              core.info(`Created comment ${data.html_url}`)
+            }
