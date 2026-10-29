@@ -123,7 +123,7 @@ export function SavingsCalculator() {
             <div className="flex flex-col justify-center p-8 lg:p-10">
               <span
                 data-testid="savings-hours"
-                className={cn('block text-[48px] leading-none font-semibold tracking-[-0.045em] tabular lg:text-[56px]', savings ? 'text-gradient-brand' : 'text-ink-300')}
+                className={cn('block text-[48px] leading-none font-semibold tracking-[-0.045em] tabular lg:text-[56px]', savings ? 'text-gradient-brand' : 'text-ink-faint')}
               >
                 {savings ? NUMBER.format(savings.hoursPerMonth) : SAVINGS_TEXT.empty}
               </span>
@@ -134,7 +134,7 @@ export function SavingsCalculator() {
             <div className="flex flex-col justify-center border-t border-ink-150 p-8 lg:p-10">
               <span
                 data-testid="savings-dollars"
-                className={cn('block text-[48px] leading-none font-semibold tracking-[-0.045em] tabular lg:text-[56px]', savings ? 'text-gradient-brand' : 'text-ink-300')}
+                className={cn('block text-[48px] leading-none font-semibold tracking-[-0.045em] tabular lg:text-[56px]', savings ? 'text-gradient-brand' : 'text-ink-faint')}
               >
                 {savings ? MONEY.format(savings.dollarsPerYear) : SAVINGS_TEXT.empty}
               </span>

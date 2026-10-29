@@ -25,6 +25,8 @@
   --color-ink-200: #d7dde5;
   --color-ink-300: #b9c2ce;
   --color-ink-400: #8a96a7;
+  /* Faint text (step numbers, empty results): ink-300 in light, readable in dark. */
+  --color-ink-faint: #b9c2ce;
   --color-ink-500: #627083;
   --color-ink-600: #4a5668;
   --color-ink-700: #344052;
@@ -125,6 +127,7 @@
   --color-ink-200: #2f4059;
   --color-ink-300: #4a5d78;
   --color-ink-400: #8a9bb0;
+  --color-ink-faint: #8a9bb0;
   --color-ink-500: #9dabbd;
   --color-ink-600: #b4c0ce;
   --color-ink-700: #c9d2dd;

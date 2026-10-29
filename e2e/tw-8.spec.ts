@@ -167,6 +167,8 @@ test('the page follows the system theme, remembers the visitor choice and stays 
   // Contrast in dark (system dark, nothing stored).
   await caption(page, 'Dark theme: text is readable (WCAG AA contrast)', step())
   await expectContrast(page)
+  // Dark only: the light theme keeps its original faint step numbers.
+  await expectReadable(page.getByTestId('how-step').first().locator('.font-mono'), 'step number')
   await scrollToTop(page)
   await hideCaption(page)
   await saveEvidence(page, 'tw-8-contrast-dark', { fullPage: false })
@@ -219,4 +221,29 @@ test('the page follows the system theme, remembers the visitor choice and stays 
   await hideCaption(page)
   await saveEvidence(page, 'tw-8-contrast-light', { fullPage: false })
   await expect(navbar).toBeVisible()
+
+  // The colors only animate right after a switch, never on load.
+  expect(await page.evaluate(() => document.documentElement.classList.contains('theme-transition'))).toBe(false)
+  await toggle.click()
+  expect(await page.evaluate(() => document.documentElement.classList.contains('theme-transition'))).toBe(true)
+  await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('theme-transition'))).toBe(false)
+
+  // A browser that blocks storage (private mode) still gets a working switch and no errors.
+  const blocked = await page.context().newPage()
+  const errors: string[] = []
+  blocked.on('pageerror', (e) => errors.push(e.message))
+  await blocked.addInitScript(() => {
+    const fail = () => {
+      throw new Error('storage blocked')
+    }
+    Object.defineProperty(window, 'localStorage', { get: fail })
+  })
+  await blocked.emulateMedia({ colorScheme: 'light' })
+  await blocked.goto('/')
+  await expect(blocked.getByRole('heading', { level: 1 })).toBeVisible()
+  expect(await theme(blocked)).toBe('light')
+  await blocked.getByTestId('theme-toggle').click()
+  expect(await theme(blocked)).toBe('dark')
+  expect(errors).toEqual([])
+  await blocked.close()
 })

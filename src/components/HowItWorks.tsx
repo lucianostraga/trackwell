@@ -33,7 +33,7 @@ export function HowItWorks() {
                 <span className="relative grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-fill-500 to-fill-700 text-white shadow-raised ring-4 ring-surface">
                   <Icon aria-hidden="true" className="size-6" strokeWidth={2} />
                 </span>
-                <span className="font-mono text-sm font-medium text-ink-300 tabular">0{i + 1}</span>
+                <span className="font-mono text-sm font-medium text-ink-faint tabular">0{i + 1}</span>
               </div>
               <h3 className="mt-6 text-xl font-semibold tracking-[-0.02em] text-ink-900">{title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-ink-500">{description}</p>

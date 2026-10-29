@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { THEME_STORAGE_KEY, resolveTheme, toggleTheme, type Theme } from '../lib/theme'
+import { THEME_STORAGE_KEY, parseStoredTheme, resolveTheme, toggleTheme, type Theme } from '../lib/theme'
 
 const DARK_QUERY = '(prefers-color-scheme: dark)'
 
@@ -49,7 +49,7 @@ export function useTheme(): { theme: Theme; toggle: () => void } {
     const onChange = () => {
       // Once a choice is stored, the system setting is ignored.
       const stored = readStored()
-      if (stored === 'light' || stored === 'dark') return
+      if (parseStoredTheme(stored)) return
       const next = resolveTheme(stored, query.matches)
       animateColors()
       apply(next)
