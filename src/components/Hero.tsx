@@ -16,7 +16,7 @@ function FloatingCards() {
         className="absolute top-[47%] -left-10 hidden w-[264px] animate-float rounded-2xl bg-surface/95 p-4 shadow-pop ring-1 ring-ink-900/[0.06] backdrop-blur xl:block 2xl:-left-16"
       >
         <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-xl bg-[#e6f7fa] text-[#0aa2c0]">
+          <span className="grid size-10 place-items-center rounded-xl bg-sky-50 text-sky-600">
             <Wind className="size-5" strokeWidth={2.2} />
           </span>
           <div className="min-w-0">

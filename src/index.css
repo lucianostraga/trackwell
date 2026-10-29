@@ -67,6 +67,19 @@
     0 60px 120px -24px rgb(14 132 120 / 0.28);
   --shadow-button: 0 1px 2px rgb(14 26 43 / 0.12), inset 0 1px 0 rgb(255 255 255 / 0.16);
 
+  /* Fixed fills (same in both themes): white text sits on these. */
+  --color-brand-solid: #0e8478;
+  --color-brand-solid-hover: #0f6a62;
+  --color-brand-solid-active: #11554f;
+  --color-fill-400: #34b3a1;
+  --color-fill-500: #12988a;
+  --color-fill-700: #0f6a62;
+
+  /* Sky accent (hero floating card) and the product frame edge */
+  --color-sky-50: #e6f7fa;
+  --color-sky-600: #0aa2c0;
+  --color-frame-ring: rgb(255 255 255 / 0.7);
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
@@ -92,6 +105,83 @@
     50% {
       transform: translateY(-6px);
     }
+  }
+}
+
+/*
+ * Dark theme: a navy night palette. The ink scale is inverted (900 is the lightest text), so every existing
+ * utility switches by itself. The fixed fills above and the final call-to-action band stay the same.
+ */
+:root[data-theme='dark'] {
+  --color-page: #0a1320;
+  --color-page-subtle: #0e1a2a;
+  --color-surface: #111e2f;
+  --color-night: #16283d;
+
+  --color-ink-25: #0f1b2b;
+  --color-ink-50: #142133;
+  --color-ink-100: #1a2a40;
+  --color-ink-150: #243449;
+  --color-ink-200: #2f4059;
+  --color-ink-300: #4a5d78;
+  --color-ink-400: #8a9bb0;
+  --color-ink-500: #9dabbd;
+  --color-ink-600: #b4c0ce;
+  --color-ink-700: #c9d2dd;
+  --color-ink-800: #dde3ea;
+  --color-ink-900: #f1f4f8;
+
+  --color-brand-50: #0f2a2c;
+  --color-brand-100: #134040;
+  --color-brand-200: #17524d;
+  --color-brand-300: #2a8f84;
+  --color-brand-400: #3bbfab;
+  --color-brand-500: #3ab8a6;
+  --color-brand-600: #4cc9b6;
+  --color-brand-700: #7fdccd;
+  --color-brand-800: #a6e6d9;
+
+  --color-sun-50: #2e2013;
+  --color-sun-100: #44301a;
+  --color-sun-300: #7a4e2a;
+  --color-sun-400: #f29a5b;
+  --color-sun-600: #f5a76a;
+  --color-sun-700: #f7b985;
+
+  --color-good-50: #0f2a20;
+  --color-good-100: #14402e;
+  --color-good-500: #3cc47f;
+  --color-good-700: #6fe0a6;
+  --color-bad-50: #2d1519;
+  --color-bad-100: #4a1d22;
+  --color-bad-500: #ef6a6e;
+  --color-bad-700: #ff9a9d;
+
+  --color-sky-50: #0f2a35;
+  --color-sky-600: #4fd0e8;
+  --color-frame-ring: rgb(255 255 255 / 0.1);
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 1px 1px rgb(0 0 0 / 0.2);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.35), 0 8px 20px -6px rgb(0 0 0 / 0.5);
+  --shadow-pop: 0 2px 4px rgb(0 0 0 / 0.35), 0 16px 40px -8px rgb(0 0 0 / 0.6);
+  --shadow-product: 0 0 0 1px rgb(255 255 255 / 0.06), 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -12px rgb(0 0 0 / 0.6),
+    0 60px 120px -24px rgb(14 132 120 / 0.3);
+  --shadow-button: 0 1px 2px rgb(0 0 0 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.16);
+}
+
+/* Colors glide when the visitor toggles the theme (class set briefly by the toggle; never on first load). */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease,
+      fill 200ms ease,
+      stroke 200ms ease,
+      box-shadow 200ms ease !important;
   }
 }
 

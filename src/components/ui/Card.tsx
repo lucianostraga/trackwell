@@ -4,7 +4,7 @@ import { cn } from './cn'
 export function Card({ className, ...rest }: ComponentPropsWithoutRef<'section'>) {
   return (
     <section
-      className={cn('rounded-xl border border-ink-150 bg-white shadow-card', className)}
+      className={cn('rounded-xl border border-ink-150 bg-surface shadow-card', className)}
       {...rest}
     />
   )

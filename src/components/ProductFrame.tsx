@@ -19,7 +19,7 @@ export function ProductFrame({ src, alt, url, width, height, className }: Produc
         aria-hidden="true"
         className="absolute inset-x-[8%] top-[12%] -bottom-[6%] rounded-[48px] bg-[radial-gradient(closest-side,var(--color-brand-300),transparent)] opacity-60 blur-3xl"
       />
-      <div className="relative rounded-[20px] bg-white/55 p-2 shadow-product ring-1 ring-white/70 backdrop-blur sm:rounded-[26px] sm:p-2.5">
+      <div className="relative rounded-[20px] bg-surface/55 p-2 shadow-product ring-1 ring-frame-ring backdrop-blur sm:rounded-[26px] sm:p-2.5">
         <div className="overflow-hidden rounded-[14px] bg-surface ring-1 ring-ink-900/[0.07] sm:rounded-[18px]">
           <div className="flex h-9 items-center gap-3 border-b border-ink-150 bg-ink-25 px-4 sm:h-11">
             <div className="flex gap-1.5" aria-hidden="true">

@@ -80,7 +80,7 @@ export function Pricing() {
                   {plan.highlighted && (
                     <span
                       data-testid="plan-popular"
-                      className="rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white"
+                      className="rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white"
                     >
                       Most popular
                     </span>

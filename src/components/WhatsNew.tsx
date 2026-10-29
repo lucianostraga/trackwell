@@ -59,7 +59,7 @@ export function WhatsNew({ releases }: { releases: readonly Release[] }) {
                           {r.title}
                         </p>
                         {latest && (
-                          <span className="rounded-full bg-brand-600 px-2 py-0.5 text-xs font-semibold text-white">Latest</span>
+                          <span className="rounded-full bg-brand-solid px-2 py-0.5 text-xs font-semibold text-white">Latest</span>
                         )}
                       </div>
                       <time dateTime={r.date} className="mt-1 block text-sm text-ink-500 tabular">

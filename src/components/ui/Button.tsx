@@ -3,10 +3,10 @@ import { cn } from './cn'
 
 const VARIANTS = {
   primary:
-    'bg-brand-600 text-white shadow-button hover:bg-brand-700 active:bg-brand-800',
+    'bg-brand-solid text-white shadow-button hover:bg-brand-solid-hover active:bg-brand-solid-active',
   secondary:
     'bg-surface text-ink-800 ring-1 ring-ink-200 ring-inset shadow-card hover:bg-ink-50 hover:ring-ink-300',
-  light: 'bg-white text-ink-900 shadow-button hover:bg-brand-50',
+  light: 'bg-white text-[#0e1a2b] shadow-button hover:bg-[#edfaf7]',
   ghost: 'text-white ring-1 ring-white/25 ring-inset hover:bg-white/10',
 } as const
 

@@ -30,7 +30,7 @@ export function HowItWorks() {
               className="relative rounded-2xl bg-surface p-7 shadow-card ring-1 ring-ink-150 lg:p-8"
             >
               <div className="flex items-center justify-between">
-                <span className="relative grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-raised ring-4 ring-surface">
+                <span className="relative grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-fill-500 to-fill-700 text-white shadow-raised ring-4 ring-surface">
                   <Icon aria-hidden="true" className="size-6" strokeWidth={2} />
                 </span>
                 <span className="font-mono text-sm font-medium text-ink-300 tabular">0{i + 1}</span>

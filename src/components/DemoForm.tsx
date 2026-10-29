@@ -137,7 +137,7 @@ export function DemoForm() {
         <button
           type="submit"
           data-testid="demo-submit"
-          className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-brand-600 px-6 text-base font-semibold tracking-[-0.01em] text-white shadow-button transition-colors hover:bg-brand-700 active:bg-brand-800"
+          className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-brand-solid px-6 text-base font-semibold tracking-[-0.01em] text-white shadow-button transition-colors hover:bg-brand-solid-hover active:bg-brand-solid-active"
         >
           Request a demo
         </button>

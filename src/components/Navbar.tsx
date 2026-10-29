@@ -4,6 +4,7 @@ import type { BuildInfo } from '../lib/build-info'
 import { sectionHref } from '../lib/sections'
 import { EnvironmentBadge } from './EnvironmentBadge'
 import { Logo } from './Logo'
+import { ThemeToggle } from './ThemeToggle'
 import { ButtonLink } from './ui/Button'
 
 /** Sticky top bar: logo, section links and the main call to action. Previews also show their badge. */
@@ -34,10 +35,11 @@ export function Navbar({ build }: { build: BuildInfo }) {
             </li>
           ))}
         </ul>
+        <ThemeToggle className="ml-auto md:ml-0" />
         <ButtonLink
           href={sectionHref(SECTION.contact)}
           size="sm"
-          className="ml-auto md:ml-3"
+          className="md:ml-1"
           data-testid="nav-book-demo"
         >
           Book a demo

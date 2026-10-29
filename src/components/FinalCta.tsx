@@ -12,7 +12,7 @@ export function FinalCta() {
         <div className="relative isolate overflow-hidden rounded-[32px] bg-night px-6 py-20 text-center shadow-pop sm:px-16 sm:py-24">
           <div
             aria-hidden="true"
-            className="absolute -top-40 left-1/2 -z-10 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-brand-500)_55%,transparent),transparent)] blur-2xl"
+            className="absolute -top-40 left-1/2 -z-10 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,#12988a_55%,transparent),transparent)] blur-2xl"
           />
           <div
             aria-hidden="true"
@@ -24,7 +24,7 @@ export function FinalCta() {
           >
             See Trackwell on your floor
           </h2>
-          <p className="mx-auto mt-5 max-w-[560px] text-lg leading-relaxed text-pretty text-ink-300">
+          <p className="mx-auto mt-5 max-w-[560px] text-lg leading-relaxed text-pretty text-[#b9c2ce]">
             In a 30-minute walkthrough we map one of your units and show you its equipment, live.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">

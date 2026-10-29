@@ -58,7 +58,7 @@ export function Customers() {
           <figcaption className="mt-8 flex items-center justify-center gap-4">
             <span
               aria-hidden="true"
-              className="grid size-12 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-700 text-[15px] font-semibold text-white shadow-raised ring-4 ring-surface"
+              className="grid size-12 place-items-center rounded-full bg-gradient-to-br from-fill-400 to-fill-700 text-[15px] font-semibold text-white shadow-raised ring-4 ring-surface"
             >
               {initialsOf(QUOTE.name)}
             </span>
