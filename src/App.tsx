@@ -6,6 +6,7 @@ import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
 import { HowItWorks } from './components/HowItWorks'
 import { Navbar } from './components/Navbar'
+import { SavingsCalculator } from './components/SavingsCalculator'
 import { TrustBar } from './components/TrustBar'
 import { WhatsNew } from './components/WhatsNew'
 import { BUILD_INFO } from './config'
@@ -25,6 +26,7 @@ export default function App() {
         <HowItWorks />
         <Features />
         <Customers />
+        <SavingsCalculator />
         <WhatsNew releases={RELEASES} />
         <FinalCta />
         <Contact />
