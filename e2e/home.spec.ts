@@ -1,5 +1,4 @@
 import { readFileSync } from 'node:fs'
-import { parseReleases } from '../src/lib/releases'
 import { expect, test } from '@playwright/test'
 import {
   caption,
@@ -84,8 +83,8 @@ test('a hospital visitor reads the Trackwell website and books a demo', async ({
   await expect(items).toHaveCount(rawReleases.length)
   await expect(page.getByTestId('release-count')).toHaveText(`${rawReleases.length} releases shipped`)
   const newest = page.getByTestId('release-link').first()
-  await expect(newest).toHaveText(parseReleases(rawReleases)[0]!.key)
-  await expect(newest).toHaveAttribute('href', `https://lucianostraga.atlassian.net/browse/${parseReleases(rawReleases)[0]!.key}`)
+  await expect(newest).toHaveText(rawReleases[0]!.key)
+  await expect(newest).toHaveAttribute('href', `https://lucianostraga.atlassian.net/browse/${rawReleases[0]!.key}`)
   await pointAt(newest)
   await hideCaption(page)
   await saveEvidence(page, 'whats-new', { fullPage: false })
