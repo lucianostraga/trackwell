@@ -5,6 +5,8 @@ model: haiku
 tools: Read, Write, Bash
 maxTurns: 12
 color: green
+skills:
+  - writing-for-people
 ---
 You write the delivery paperwork for ONE ticket, in English, crisp and factual, and in plain language: follow
 "Writing for people" in CLAUDE.md. Product owners and managers read the Jira comment and the top of the pull

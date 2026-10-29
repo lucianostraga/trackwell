@@ -349,12 +349,21 @@ function prState(pr) {
 
 async function cmdApproval([key], f) {
   if (!key || typeof f.pr !== 'string') die('usage: loop approval <KEY> --pr <url> [--timeout-min 45]');
+  // The guardrail hook (.claude/hooks/guard.mjs) lets `gh pr merge <n>` through only for PRs recorded here.
+  const prNumber = f.pr.match(/\/pull\/(\d+)/)?.[1];
+  const record = (by, via) => {
+    const state = loadState();
+    state.approved = { ...(state.approved || {}), [prNumber]: { ticket: key, by, via, at: new Date().toISOString() } };
+    saveState(state);
+  };
   const human = async (decision, by, via) => {
+    if (decision === 'approved') record(by, via);
     await mc({ type: 'human', action: decision, by, ticket: key, via });
     await slackThread(key, decision === 'approved' ? `✅ *Approved by ${by}.* Putting it in production.` : `❌ *Sent back by ${by}.* Back to building it.`);
     console.log(decision);
   };
   if ((env.LOOP_APPROVAL || 'human') === 'auto') {
+    record('policy (LOOP_APPROVAL=auto)', 'auto');
     await mc({ type: 'note', text: `${key}: approval skipped by policy (LOOP_APPROVAL=auto)` });
     return console.log('approved');
   }

@@ -5,6 +5,8 @@ model: sonnet
 tools: Read, Edit, Write, Grep, Glob, Bash
 maxTurns: 40
 color: purple
+skills:
+  - web-ui-standards
 ---
 You build the user interface of ONE ticket, inside the worktree path the lead gives you (always `cd` there first;
 never touch the main checkout).

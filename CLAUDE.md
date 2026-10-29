@@ -34,13 +34,12 @@ Side effects on Jira, Slack and the dashboard go through `node tools/loop.mjs` (
 GitHub through `gh`.
 
 ## Writing for people
-Slack messages, Jira comments, step notes and the summary at the top of each pull request are read by product
-owners, managers and other non-developers. Write them so anyone understands what happened:
-- Say what changed for the user and how we know it works, not how the code does it. No file paths, function
-  names, test counts by file, or jargon ("e2e", "lint", "refactor", "regression") outside the pull request's
-  technical section.
-- Short sentences, everyday words, one idea per line, at most two lines per Slack update.
-- Use the team's own words and numbers ("ventilators that have been out of the ICU for more than 10 minutes"), not
-  internal identifiers.
-- Good: "Nurses can now find the nearest free wheelchair. Tested in a real browser; video attached."
-  Bad: "Implemented findNearest() in src/lib/nearest.ts with 14 Vitest cases; e2e green."
+Slack, Jira, step notes and the top of each pull request are read by non-developers: plain language, what changed for
+the visitor and how we know it works. The `writing-for-people` skill has the rules and examples.
+
+## Guardrails (hooks)
+`.claude/hooks/guard.mjs` runs before every command and file edit of every agent and blocks, whatever the model
+decides: merging a pull request before a person approved the deploy in Slack, pushing to main or force-pushing,
+editing the pipelines, secrets or the guardrails themselves, printing credentials, changing repository settings and
+broad deletes. `.claude/hooks/session-start.mjs` briefs every session with the backlog. The team's standards are
+skills preloaded into the agents: `web-ui-standards`, `review-checklist`, `writing-for-people`, `ts-unit-tests`.
