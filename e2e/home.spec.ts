@@ -38,7 +38,7 @@ test('a hospital visitor reads the Trackwell website and books a demo', async ({
   await expect(page.getByTestId('hero-book-demo')).toBeVisible()
   await expect(page.getByTestId('customer-logo')).toHaveCount(6)
   const nav = page.getByRole('navigation', { name: 'Main' })
-  for (const label of ['Product', 'How it works', 'Customers', 'Pricing']) {
+  for (const label of ['Product', 'How it works', 'Customers', 'Pricing', 'FAQ']) {
     await expect(nav.getByRole('link', { name: label, exact: true })).toBeVisible()
   }
   await pointAt(screenshot)

@@ -2,6 +2,7 @@ import { Contact } from './components/Contact'
 import { Customers } from './components/Customers'
 import { Features } from './components/Features'
 import { FinalCta } from './components/FinalCta'
+import { Faq } from './components/Faq'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
 import { HowItWorks } from './components/HowItWorks'
@@ -29,6 +30,7 @@ export default function App() {
         <Customers />
         <SavingsCalculator />
         <Pricing />
+        <Faq />
         <WhatsNew releases={RELEASES} />
         <FinalCta />
         <Contact />
