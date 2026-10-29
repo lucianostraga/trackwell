@@ -1,5 +1,6 @@
-import { ArrowRight, CalendarCheck, Clock, Mail, MapPinned } from 'lucide-react'
+import { CalendarCheck, Clock, MapPinned } from 'lucide-react'
 import { CONTACT_EMAIL, SECTION } from '../content/sections'
+import { DemoForm } from './DemoForm'
 import { Container, SectionHeading } from './ui/Section'
 
 const EXPECT = [
@@ -12,7 +13,7 @@ const EXPECT = [
 export function Contact() {
   return (
     <section id={SECTION.contact} aria-labelledby="contact-title" className="py-24 sm:py-28" data-testid="contact">
-      <Container className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <Container className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
         <div>
           <SectionHeading
             id="contact-title"
@@ -34,21 +35,17 @@ export function Contact() {
         </div>
 
         <div className="rounded-3xl bg-page-subtle p-8 ring-1 ring-ink-150 sm:p-10">
-          <span className="grid size-12 place-items-center rounded-2xl bg-surface text-brand-600 shadow-card ring-1 ring-ink-150">
-            <Mail aria-hidden="true" className="size-6" />
-          </span>
-          <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-ink-900">Email our team</p>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
-            We reply within one business day.
+          <DemoForm />
+          <p className="mt-5 text-center text-sm text-ink-500">
+            Prefer email?{' '}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              data-testid="contact-email"
+              className="font-semibold text-brand-700 hover:underline"
+            >
+              {CONTACT_EMAIL}
+            </a>
           </p>
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            data-testid="contact-email"
-            className="group mt-6 flex items-center justify-between gap-4 rounded-2xl bg-surface px-5 py-4 text-lg font-semibold text-brand-700 shadow-card ring-1 ring-ink-150 transition hover:shadow-raised hover:ring-brand-200"
-          >
-            {CONTACT_EMAIL}
-            <ArrowRight aria-hidden="true" className="size-5 transition-transform group-hover:translate-x-0.5" />
-          </a>
         </div>
       </Container>
     </section>
