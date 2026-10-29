@@ -41,7 +41,7 @@ test('a buyer compares the plans and switches between monthly and yearly billing
 
   await caption(page, 'Monthly billing is the default: Starter $290, Growth $890', step())
   await smoothScrollTo(page.getByTestId('plan-card').nth(1))
-  await expect(page.getByTestId('billing-monthly')).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByTestId('billing-monthly')).toHaveAttribute('aria-pressed', 'true')
   await expect(starter.getByTestId('plan-price')).toHaveText('$290')
   await expect(growth.getByTestId('plan-price')).toHaveText('$890')
   await expect(starter.getByTestId('plan-assets')).toHaveText('up to 250 assets')
@@ -58,7 +58,7 @@ test('a buyer compares the plans and switches between monthly and yearly billing
   await caption(page, 'Yearly billing: 2 months free, shown as a lower monthly price', step())
   const heightBefore = await growth.evaluate((el) => el.getBoundingClientRect().height)
   await presentClick(page.getByTestId('billing-yearly'))
-  await expect(page.getByTestId('billing-yearly')).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByTestId('billing-yearly')).toHaveAttribute('aria-pressed', 'true')
   await expect(starter.getByTestId('plan-price')).toHaveText('$241')
   await expect(growth.getByTestId('plan-price')).toHaveText('$741')
   await expect(page.getByTestId('plan-save')).toHaveCount(2)
@@ -78,6 +78,9 @@ test('a buyer compares the plans and switches between monthly and yearly billing
   await expect(starter.getByTestId('plan-price')).toHaveText('$290')
   await expect(growth.getByTestId('plan-price')).toHaveText('$890')
   await expect(page.getByTestId('plan-save')).toHaveCount(0)
+  for (const plan of [starter, growth]) {
+    await expect(plan.getByRole('link', { name: 'Book a demo' })).toHaveAttribute('href', '#contact')
+  }
   const contactSales = enterprise.getByTestId('plan-contact-sales')
   await expect(contactSales).toHaveAttribute('href', '#contact')
   await presentClick(contactSales)

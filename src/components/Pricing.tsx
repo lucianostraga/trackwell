@@ -35,7 +35,7 @@ export function Pricing() {
 
         <div className="mt-10 flex justify-center">
           <div
-            role="radiogroup"
+            role="group"
             aria-label="Billing period"
             className="inline-flex rounded-full bg-ink-100 p-1 ring-1 ring-ink-200 ring-inset"
           >
@@ -45,8 +45,7 @@ export function Pricing() {
                 <button
                   key={id}
                   type="button"
-                  role="radio"
-                  aria-checked={active}
+                  aria-pressed={active}
                   data-testid={`billing-${id}`}
                   onClick={() => setBilling(id)}
                   className={cn(
@@ -118,10 +117,8 @@ export function Pricing() {
                         Save {monthsFree} months
                       </span>
                     </>
-                  ) : paid ? (
-                    <span>billed monthly</span>
                   ) : (
-                    <span>Talk to sales about your hospital group</span>
+                    paid && <span>billed monthly</span>
                   )}
                 </div>
 
