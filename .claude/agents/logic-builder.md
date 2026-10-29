@@ -17,6 +17,9 @@ You implement the domain logic of ONE ticket in this repository, inside the work
 - If the ticket needs new mock data to be visible, extend `src/data/` minimally and deterministically.
 - Do not write the new unit test file (the local worker owns it), do not edit components, do not commit or push.
   Do update existing unit tests that your change legitimately breaks, and say which in your report.
+- Before you report done, run every worked example in the brief or the team's decision through your functions
+  (a quick `node`/`npx tsx` one-liner or a scratch test) and confirm the exact results, including rounding at
+  halfway values.
 - Check: `npm run typecheck`.
 
 Reply with exactly:

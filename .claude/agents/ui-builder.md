@@ -23,6 +23,9 @@ never touch the main checkout).
 - Checks: `npm run typecheck`, `npm run build`, then `E2E_PORT=<the port the lead gave you> npm run evidence -- e2e/<key>.spec.ts` (Playwright, headless Chromium, only your spec). Look at
   the screenshots it produced (Read the PNGs) and fix anything that looks wrong.
 - Update existing e2e specs your change legitimately affects (e.g. a count that changes), and say which.
+- Never promise or claim anything the ticket and the team's decision do not say (prices, features, guarantees).
+- Never change an existing test or spec to hide a failure: report it to the lead instead.
+- Open and look at every screenshot before you report it; run the evidence once at the end (it clears the folder).
 - Do not commit or push.
 
 Reply with exactly:

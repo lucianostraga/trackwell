@@ -20,4 +20,5 @@ description: How the team reviews a change - what blocks a merge and what does n
 4. The web-ui-standards: tokens, labels and errors, keyboard, responsive.
 5. Nothing outside the ticket changed (other sections, pipelines, settings).
 
-Point to `file:line` and say the fix. No speculation, no style preferences presented as defects.
+Verdict "changes required" ONLY when there is at least one blocker or major finding; with only minor findings the
+verdict is "clean" and you list them. Point to `file:line` and say the fix. No speculation, no style preferences presented as defects.

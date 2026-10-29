@@ -22,6 +22,9 @@ Tools: `node tools/loop.mjs` (Jira, Slack, approvals, Mission Control: run it wi
 - Launch subagents in the background and react to their completion notifications; watch CI in the background too.
 - The Slack channel is the team's delivery channel: only software delivery goes there (what the agents are working
   on, pull requests, checks, deploy approvals, what reached production), never product chatter.
+- Previews and production share one publishing queue (gh-pages): do not push to a pull request while a production
+  deploy is running (`gh run list --workflow deploy.yml -L 1`); wait for it to finish.
+- Fixes after a review go back to the reviewer only when they change behaviour; wording and layout tweaks do not.
 - Keep the user-facing text short: one line per event. Every `--note` and `--summary` goes to Slack, Jira and the
   dashboard: plain language for non-developers ("Wheelchairs and pumps now show the nearest free one"), never file
   names or test jargon. See "Writing for people" in CLAUDE.md.
@@ -67,7 +70,10 @@ When all three report, integrate: read every diff yourself, fix seams, run `npm 
 `git push -u origin HEAD`. Open the PR as draft:
 `gh pr create --draft --title "<KEY>: <summary>" --body "Delivered by the agentic loop. Evidence follows." --base main`.
 `loop step <KEY> sandbox started --gate 1 --link pr=<url>`. Watch CI in the background:
-`gh pr checks <n> --watch --interval 10`. When "Gate 1 · Build & unit tests" and "Deploy preview (sandbox)" pass:
+the run for your exact commit, not `gh pr checks --watch` (it reports green before the checks register):
+`gh run list --branch <branch> --commit $(git rev-parse HEAD) -L 1 --json databaseId -q '.[0].databaseId'` (retry
+until it returns an id), then `gh run watch <id> --exit-status`. Never pipe test commands into `grep`: it hides
+failures. When "Gate 1 · Build & unit tests" and "Deploy preview (sandbox)" pass:
 `loop step <KEY> sandbox passed --gate 1 --link preview=https://lucianostraga.github.io/trackwell/preview/pr-<n>/`.
 If a check fails: `loop step <KEY> sandbox failed --gate 1 --note "<reason>"`, ask `ci-doctor` (Haiku), fix
 (yourself or by resuming the builder with SendMessage), push, and watch again. After EVERY push (review fixes too),
