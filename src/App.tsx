@@ -7,6 +7,7 @@ import { Hero } from './components/Hero'
 import { HowItWorks } from './components/HowItWorks'
 import { Navbar } from './components/Navbar'
 import { SavingsCalculator } from './components/SavingsCalculator'
+import { Pricing } from './components/Pricing'
 import { TrustBar } from './components/TrustBar'
 import { WhatsNew } from './components/WhatsNew'
 import { BUILD_INFO } from './config'
@@ -27,6 +28,7 @@ export default function App() {
         <Features />
         <Customers />
         <SavingsCalculator />
+        <Pricing />
         <WhatsNew releases={RELEASES} />
         <FinalCta />
         <Contact />

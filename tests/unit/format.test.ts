@@ -27,9 +27,15 @@ describe('formatBuildTime', () => {
 
 describe('formatUsd', () => {
   it('formats whole dollars with grouping and no cents', () => {
+    expect(formatUsd(290)).toBe('$290')
+    expect(formatUsd(2900)).toBe('$2,900')
     expect(formatUsd(78000)).toBe('$78,000')
     expect(formatUsd(12000000)).toBe('$12,000,000')
     expect(formatUsd(0)).toBe('$0')
+  })
+
+  it('never shows cents', () => {
+    expect(formatUsd(241.67)).toBe('$242')
   })
 })
 
