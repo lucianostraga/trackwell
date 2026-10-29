@@ -4,14 +4,17 @@ import { MINUTES_SAVED_PER_ASSET_PER_MONTH } from '../lib/savings'
 import { PLANS } from './pricing'
 import { CONTACT_EMAIL } from './sections'
 
+/** A paid plan: the FAQ quotes its price and asset limit, so both must exist. */
 function plan(id: string) {
   const found = PLANS.find((p) => p.id === id)
   if (!found) throw new Error(`Unknown plan: ${id}`)
-  return found
+  const { monthlyPrice, assetLimit } = found
+  if (monthlyPrice === null || assetLimit === null) throw new Error(`Plan without a public price: ${id}`)
+  return { ...found, monthlyPrice, assetLimit }
 }
 
-const usd = (n: number | null) => `$${(n ?? 0).toLocaleString('en-US')}`
-const count = (n: number | null) => (n ?? 0).toLocaleString('en-US')
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`
+const count = (n: number) => n.toLocaleString('en-US')
 
 const starter = plan('starter')
 const growth = plan('growth')

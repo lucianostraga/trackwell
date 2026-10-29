@@ -12,7 +12,6 @@ export function Faq() {
   const [openId, setOpenId] = useState<string | null>(null)
 
   const items = filterFaq(FAQ, query)
-  const activeId = items.some((i) => i.id === openId) ? openId : null
   const count = `${items.length} ${items.length === 1 ? 'question' : 'questions'}`
 
   return (
@@ -39,11 +38,16 @@ export function Faq() {
               id="faq-search"
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value
+                setQuery(next)
+                // An answer hidden by the search stays closed when it comes back.
+                if (!filterFaq(FAQ, next).some((i) => i.id === openId)) setOpenId(null)
+              }}
               placeholder="Search questions"
               autoComplete="off"
               data-testid="faq-search"
-              className="h-12 w-full rounded-full bg-surface px-5 text-[16px] text-ink-900 shadow-card ring-1 ring-ink-200 outline-none ring-inset placeholder:text-ink-400 focus:ring-2 focus:ring-brand-500"
+              className="h-12 w-full rounded-full bg-surface px-5 text-[16px] text-ink-900 shadow-card ring-1 ring-ink-200 outline-none ring-inset placeholder:text-ink-400 focus:ring-2 focus:ring-brand-500 [&::-webkit-search-cancel-button]:appearance-none"
             />
             <p
               aria-live="polite"
@@ -72,7 +76,7 @@ export function Faq() {
             ) : (
               <ul className="space-y-3">
                 {items.map((item) => {
-                  const open = item.id === activeId
+                  const open = item.id === openId
                   return (
                     <li
                       key={item.id}

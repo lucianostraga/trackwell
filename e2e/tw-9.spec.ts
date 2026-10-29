@@ -68,6 +68,9 @@ test('a visitor searches the FAQ and opens one answer at a time', async ({ page 
 
   await caption(page, 'No match: a message and a link to ask us directly', step())
   await search.fill('')
+  // The answer that was open before the search stays closed when the full list comes back.
+  await expect(items).toHaveCount(total)
+  await expect(page.locator('[data-testid="faq-question"][aria-expanded="true"]')).toHaveCount(0)
   await search.pressSequentially('teleportation', { delay: 80 })
   await expect(items).toHaveCount(0)
   const empty = page.getByTestId('faq-empty')

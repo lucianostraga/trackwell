@@ -113,3 +113,11 @@ describe('FAQ content', () => {
     expect(FAQ.every((item) => item.question.trim().length > 0 && item.answer.trim().length > 0)).toBe(true)
   })
 })
+
+describe('FAQ pricing answer', () => {
+  it('quotes each paid plan with the price and asset limit shown on the pricing cards', () => {
+    const answer = FAQ.find((item) => item.id === 'cost')?.answer
+    expect(answer).toContain('Starter is $290 per month for up to 250 assets.')
+    expect(answer).toContain('Growth is $890 per month for up to 1,000 assets.')
+  })
+})
