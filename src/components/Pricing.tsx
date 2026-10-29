@@ -27,7 +27,7 @@ function BillingToggle({ cycle, onChange }: { cycle: BillingCycle; onChange: (c:
           <span
             className={cn(
               'rounded-full px-2 py-0.5 text-xs font-semibold',
-              active ? 'bg-white/20 text-white' : 'bg-brand-50 text-brand-700',
+              active ? 'bg-white text-brand-700' : 'bg-brand-50 text-brand-700',
             )}
           >
             {hint}
