@@ -20,6 +20,8 @@ Tools: `node tools/loop.mjs` (Jira, Slack, approvals, Mission Control: run it wi
 - Claude subagents run in parallel. The local model (`local-worker`) is a single queue: one task at a time,
   never two at once; give it the next ticket's tests as soon as it is free.
 - Launch subagents in the background and react to their completion notifications; watch CI in the background too.
+- The Slack channel is the team's delivery channel: only software delivery goes there (what the agents are working
+  on, pull requests, checks, deploy approvals, what reached production), never product chatter.
 - Keep the user-facing text short: one line per event. Every `--note` and `--summary` goes to Slack, Jira and the
   dashboard: plain language for non-developers ("Wheelchairs and pumps now show the nearest free one"), never file
   names or test jargon. See "Writing for people" in CLAUDE.md.
@@ -37,8 +39,9 @@ move yet. Not ready:
   or the data.
 Ready: `loop step <KEY> intake passed` (moves Jira to In Progress).
 
-**02 Context** — the triage brief includes the Slack decisions. `loop step <KEY> context passed --note "<the
-decisions in a few words>"` (or `skipped` if the ticket needs none).
+**02 Context** — the triage brief includes the team's decisions (the "Team decision" comments on the ticket, and any
+Slack conversation about it). `loop step <KEY> context passed --note "<the decisions in a few plain words>"` (or
+`skipped` if the ticket needs none).
 
 **03 Build** — create the worktree:
 ```
@@ -111,5 +114,6 @@ Before the second ticket in flight merges, rebase it on `origin/main`, resolve c
 cherry-pick the ticket's commits onto a fresh branch from `origin/main` instead.
 
 ## Finish
-When `loop tickets` shows no Ready tickets and nothing is in flight: `node tools/loop.mjs run finish` and a
-five-line summary: tickets shipped, gates failed and recovered, human interventions, what the local model did.
+When `loop tickets` shows no Ready tickets and nothing is in flight (or the run was limited to some tickets and they
+are done): `node tools/loop.mjs run finish --note "<3-4 plain lines: what is now in production, what the checks caught
+and fixed, how many times a person stepped in, what the local model did>"`, and the same summary here.

@@ -12,7 +12,7 @@ You implement the domain logic of ONE ticket in this repository, inside the work
 - Follow CLAUDE.md. Pure, typed functions in `src/lib/<module>.ts`; anything that depends on time takes `now` as a
   parameter. Export exactly the signatures in the lead's spec: other agents are writing the UI and the unit tests
   against those signatures right now, so do not rename or reshape them. If the spec is wrong, say so in your report.
-- Apply the acceptance criteria and the Slack decisions literally (thresholds, inclusive or exclusive bounds,
+- Apply the acceptance criteria and the team's decisions literally (thresholds, inclusive or exclusive bounds,
   exceptions). Handle empty and missing values.
 - If the ticket needs new mock data to be visible, extend `src/data/` minimally and deterministically.
 - Do not write the new unit test file (the local worker owns it), do not edit components, do not commit or push.

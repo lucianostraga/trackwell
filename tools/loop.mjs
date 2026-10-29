@@ -4,7 +4,8 @@
 //
 //   loop tickets [--json]                       backlog in rank order (Ready first is the next ticket)
 //   loop ticket <KEY>                           the whole ticket: fields, description, comments, attachments
-//   loop context <KEY>                          Slack conversations in the team channel that mention the ticket
+//   loop context <KEY>                          Slack conversations that mention the ticket (product decisions live in
+//                                               the ticket's comments; `loop ticket` shows them)
 //   loop step <KEY> <step> <status> [--gate N] [--note TEXT] [--link name=url]...
 //        step:   intake | context | build | sandbox | review | e2e | approval | ship
 //        status: started | passed | failed | waiting | skipped
@@ -21,7 +22,8 @@
 //        Gate 4. Asks for the deploy to production in Slack (react ✅ to approve, ❌ to send it back) and waits.
 //        Merging the PR or adding the `approved` label on GitHub also counts. Prints approved | rejected | timeout.
 //        LOOP_APPROVAL=auto skips it.
-//   loop run start|finish                       marks the start and end of a run
+//   loop run start                              marks the start of a run and posts the plan in the delivery channel
+//   loop run finish --note TEXT                 marks the end and posts the summary (plain language)
 //   loop note <text>                            a line for Mission Control's feed
 //
 // Env: JIRA_BASE_URL JIRA_EMAIL JIRA_API_TOKEN [JIRA_PROJECT=TW] [SLACK_BOT_TOKEN SLACK_CHANNEL_ID]
@@ -316,6 +318,29 @@ async function cmdPr([key], f) {
   console.log(`${key}: pull request announced in Slack`);
 }
 
+async function cmdRun([what = 'start'], f) {
+  const finishing = what === 'finish';
+  await mc({ type: 'run', state: finishing ? 'finished' : 'started' });
+  if (slackOn()) {
+    let text;
+    if (finishing) {
+      text = `🏁 *Delivery run finished.*${typeof f.note === 'string' ? `\n${f.note}` : ''}`;
+    } else {
+      const d = await jira('POST', '/rest/api/3/search/jql', {
+        jql: `project = ${PROJECT} AND issuetype != Epic AND status in (Ready, Refinement) ORDER BY rank ASC`, maxResults: 50,
+        fields: ['summary', 'status'],
+      });
+      const ready = d.issues.filter((i) => i.fields.status.name === 'Ready');
+      const later = d.issues.length - ready.length;
+      text = `▶️ *Delivery run started.* ${ready.length} ticket${ready.length === 1 ? '' : 's'} ready, in this order:\n`
+        + ready.map((i) => `• <${browse(i.key)}|${i.key}> ${i.fields.summary}`).join('\n')
+        + (later ? `\n${later} more still in refinement: not started until the team finishes defining them.` : '');
+    }
+    await slack('chat.postMessage', { ...AS_LOOP, channel: env.SLACK_CHANNEL_ID, text, unfurl_links: false }).catch((e) => console.error(`loop: Slack skipped (${e.message})`));
+  }
+  console.log(`run ${finishing ? 'finished' : 'started'}`);
+}
+
 function prState(pr) {
   try {
     return JSON.parse(execFileSync('gh', ['pr', 'view', pr, '--json', 'state,labels,reviewDecision'], { encoding: 'utf8' }));
@@ -377,7 +402,7 @@ const commands = {
   tickets: () => cmdTickets(f), ticket: () => cmdTicket(f._), context: () => cmdContext(f._), step: () => cmdStep(f._, f),
   skip: () => cmdSkip(f._, f), comment: () => cmdComment(f._), attach: () => cmdAttach(f._), link: () => cmdLink(f._),
   approval: () => cmdApproval(f._, f), pr: () => cmdPr(f._, f),
-  run: async () => { await mc({ type: 'run', state: f._[0] === 'finish' ? 'finished' : 'started' }); console.log(`run ${f._[0] || 'start'}`); },
+  run: () => cmdRun(f._, f),
   note: async () => { await mc({ type: 'note', text: f._.join(' ') }); console.log('noted'); },
 };
 if (!commands[cmd]) {

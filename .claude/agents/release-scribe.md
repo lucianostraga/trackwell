@@ -15,7 +15,7 @@ screenshot and video URLs). You may read the diff (`git -C <worktree> diff origi
 Write two files in `<worktree>/.loop-out/` (create the folder):
 1. `pr-body.md` — starts with **What changes for users** (2-3 plain sentences), then **How we know it works**
    (each acceptance criterion as a ✅ line in plain words, with the evidence that proves it), **Team decisions
-   applied** (from Slack, in their words), **Evidence** (preview link, screenshots as images `![name](url)`, video
+   applied** (the "Team decision" comments on the ticket, in their words), **Evidence** (preview link, screenshots as images `![name](url)`, video
    links), **Checks** (builds and tests, independent review, real-browser test, deploy approval: pending), **Who did
    what** (agent and model, one line each), then **Technical details** for developers (files, tests), and the line
    `Jira: <KEY>` with the ticket URL.
