@@ -72,7 +72,7 @@ async function expectContrast(page: Page): Promise<void> {
   await expectReadable(page.getByTestId('demo-submit'), 'form submit button')
 }
 
-test('the page follows the system theme, remembers the visitor choice and stays readable in both', async ({ page }) => {
+test('the page follows the system theme, remembers the visitor choice and stays readable in both', async ({ page, browser, baseURL }) => {
   const step = createStepCounter()
   const toggle = page.getByTestId('theme-toggle')
   const navbar = page.getByRole('navigation', { name: 'Main' })
@@ -229,7 +229,9 @@ test('the page follows the system theme, remembers the visitor choice and stays 
   await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('theme-transition'))).toBe(false)
 
   // A browser that blocks storage (private mode) still gets a working switch and no errors.
-  const blocked = await page.context().newPage()
+  // A separate, unrecorded context so the evidence video stays the walkthrough above.
+  const blockedContext = await browser.newContext({ baseURL, colorScheme: 'light' })
+  const blocked = await blockedContext.newPage()
   const errors: string[] = []
   blocked.on('pageerror', (e) => errors.push(e.message))
   await blocked.addInitScript(() => {
@@ -245,5 +247,5 @@ test('the page follows the system theme, remembers the visitor choice and stays 
   await blocked.getByTestId('theme-toggle').click()
   expect(await theme(blocked)).toBe('dark')
   expect(errors).toEqual([])
-  await blocked.close()
+  await blockedContext.close()
 })
